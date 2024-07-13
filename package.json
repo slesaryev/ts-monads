@@ -1,0 +1,35 @@
+{
+  "name": "@slesaryev/ts-monads",
+  "version": "0.1.1",
+  "description": "A TypeScript library providing Maybe and Either monads for functional programming.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/slesaryev/ts-monads.git"
+  },
+  "keywords": [
+    "typescript",
+    "monads",
+    "functional programming",
+    "maybe",
+    "either"
+  ],
+  "author": "Andriy Slesaryev (andriy.slesaryev@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/slesaryev/ts-monads/issues"
+  },
+  "homepage": "https://github.com/slesaryev/ts-monads#readme",
+  "files": [
+    "dist/**/*"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.14.10",
+    "typescript": "^5.5.3"
+  }
+}
