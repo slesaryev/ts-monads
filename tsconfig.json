@@ -8,10 +8,15 @@
     "esModuleInterop": true
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "tests/Either.test.ts",
+    "tests/Either.test.ts",
+    "tests/Maybe.test.ts",
+    "tests/Maybe.test.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "tests"
   ]
 }
