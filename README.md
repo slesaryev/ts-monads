@@ -9,6 +9,12 @@
   - [Transforming Values with `map`](#transforming-values-with-map)
   - [Flat-Mapping Values with `flatMap`](#flat-mapping-values-with-flatmap)
   - [Retrieving Values](#retrieving-values)
+- [Either](#either-monad-usage-examples)
+  - [Creating Either Instances](#creating-either-instances)
+  - [Accessing Values](#accessing-values)
+  - [Transforming Values](#transforming-values)
+  - [Error Handling](#error-handling)
+  - [Utility Functions](#utility-functions)
 
 ## Installation
 
@@ -113,6 +119,109 @@ try {
 // Get the value or use a supplier function
 console.log(justFive.getOrElseGet(() => 0)); // 5
 console.log(nothing.getOrElseGet(() => 0)); // 0
+```
+
+### `Either` Monad Usage Examples
+
+#### Creating Either Instances
+
+```typescript
+import { Either, left, right, EitherError } from "@slesaryev/ts-monads";
+
+// Create a Left instance
+const leftValue: Either<string, number> = left("An error occurred");
+
+// Create a Right instance
+const rightValue: Either<string, number> = right(42);
+```
+
+#### Accessing Values
+
+```typescript
+import { Either, left, right } from "@slesaryev/ts-monads";
+
+const eitherValue: Either<string, number> = right(42);
+
+// Using `fold` to handle both cases
+const result = eitherValue.fold(
+  (left) => `Left value: ${left}`, // Handles the Left case
+  (right) => `Right value: ${right}`, // Handles the Right case
+);
+
+console.log(result); // Output: "Right value: 42"
+
+// Using `orElse` to get the Right value or provide a default
+const rightValue = eitherValue.orElse(0);
+console.log(rightValue); // Output: 42
+
+// Attempting to get a Left value (will always be null if it's Right)
+const leftValue = eitherValue.orElse("default");
+console.log(leftValue); // Output: "default" (because it's a Right)
+```
+
+#### Transforming Values
+
+```typescript
+import { Either, left, right } from "@slesaryev/ts-monads";
+
+// Transform the Right value
+const transformedRight: Either<string, string> = right(42).map(
+  (value) => `Number: ${value}`,
+);
+console.log(transformedRight.toString()); // Output: "Right(Number: 42)"
+
+// Transform the Left value
+const transformedLeft: Either<string, number> = left("Error").mapLeft(
+  (value) => `Error: ${value}`,
+);
+console.log(transformedLeft.toString()); // Output: "Left(Error: Error)"
+
+// Flat-map the Right value
+const flatMappedRight: Either<string, string> = right(42).flatMap((value) =>
+  right(`Number: ${value}`),
+);
+console.log(flatMappedRight.toString()); // Output: "Right(Number: 42)"
+
+// Flat-map the Left value
+const flatMappedLeft: Either<string, number> = left("Error").flatMap((value) =>
+  right(value + 1),
+);
+console.log(flatMappedLeft.toString()); // Output: "Left(Error)"
+```
+
+#### Error Handling
+
+```typescript
+import { Either, left, right, EitherError } from "@slesaryev/ts-monads";
+
+try {
+  // Attempt to create an Either with both values defined (will throw error)
+  const faultyEither = new Either("left", "right");
+} catch (error) {
+  if (error instanceof EitherError) {
+    console.error(error.message); // Output: "Either can't have both values defined."
+  } else {
+    console.error("Unexpected error:", error);
+  }
+}
+
+// Using `getOrThrow` to get the Right value or throw an error
+const value = right(42).getOrThrow(new Error("Value not present"));
+console.log(value); // Output: 42
+```
+
+#### Utility Functions
+
+```typescript
+import { Either, left, right } from "@slesaryev/ts-monads";
+
+// Create an Either instance with utility functions
+const eitherFromUtility = (value: number | null): Either<string, number> =>
+  value !== null ? right(value) : left("Value is null");
+
+// Example usage
+const eitherValue = eitherFromUtility(100);
+console.log(eitherValue.toString()); // Output: "Right(100)"
 ```
 
 ### License

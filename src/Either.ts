@@ -1,7 +1,7 @@
 /**
  * Custom error class for Either errors.
  */
-class EitherError extends Error {
+export class EitherError extends Error {
   /**
    * Constructs an instance of EitherError.
    * @param message - The error message.
@@ -33,7 +33,7 @@ export class Either<L, R> {
     }
 
     if (!Either.isDefined(left) && !Either.isDefined(right)) {
-      throw new EitherError('Either requires left or right value to be defined.');
+      throw new EitherError('Either requires a left or right value to be defined.');
     }
 
     this.left = left ?? null;
@@ -53,8 +53,16 @@ export class Either<L, R> {
    * Checks if the Either monad is holding a right value.
    * @returns True if holding a right value, otherwise false.
    */
-  private isRight(): boolean {
+  public isRight(): boolean {
     return Either.isDefined(this.right);
+  }
+
+  /**
+   * Checks if the Either monad is holding a left value.
+   * @returns True if holding a left value, otherwise false.
+   */
+  public isLeft(): boolean {
+    return !this.isRight();
   }
 
   /**
@@ -104,8 +112,30 @@ export class Either<L, R> {
    * @param defaultValue - The default value to return if the Either is left.
    * @returns The right value or the default value.
    */
-  public orElse(defaultValue: R): R {
+  public getOrElse(defaultValue: R): R {
     return this.isRight() ? this.right as R : defaultValue;
+  }
+
+  /**
+   * Returns the right value if it exists, otherwise throws an error.
+   * @param error - The error to throw if the Either is left.
+   * @returns The right value.
+   * @throws The provided error if the Either is left.
+   */
+  public getOrThrow(error: Error): R {
+    if (this.isLeft()) {
+      throw error;
+    }
+    return this.right as R;
+  }
+
+  /**
+   * Returns the right value if it exists; otherwise, computes a value using the provided supplier function.
+   * @param supplier - A function that supplies a value if the Either is left.
+   * @returns The right value or the value supplied by the supplier function.
+   */
+  public getOrElseGet(supplier: () => R): R {
+    return this.isRight() ? this.right as R : supplier();
   }
 
   /**
@@ -122,14 +152,6 @@ export class Either<L, R> {
 }
 
 /**
- * Creates an Either monad with a left or right value.
- * @param left - The left value, or null/undefined if not present.
- * @param right - The right value, or null/undefined if not present.
- * @returns An Either monad instance.
- */
-export const either = <L, R>(left: L | null | undefined, right: R | null | undefined): Either<L, R> => new Either<L, R>(left, right);
-
-/**
  * Creates a Left Either monad with the provided value.
  * @param value - The value for the left side.
  * @returns An Either monad instance representing the left value.
@@ -142,3 +164,4 @@ export const left = <L, R>(value: L): Either<L, R> => new Either<L, R>(value, nu
  * @returns An Either monad instance representing the right value.
  */
 export const right = <L, R>(value: R): Either<L, R> => new Either<L, R>(null, value);
+
