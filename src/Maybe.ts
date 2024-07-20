@@ -7,7 +7,7 @@ export class Maybe<T> {
    * Constructs an instance of Maybe.
    * @param value - The value to be contained, or null/undefined if absent.
    */
-  private constructor(private readonly value: T | null | undefined = null) { }
+  constructor(private readonly value: T | null | undefined = null) { }
 
   /**
    * Creates a Maybe with a present value (Just).
