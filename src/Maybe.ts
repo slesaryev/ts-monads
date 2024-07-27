@@ -7,7 +7,7 @@ export class Maybe<T> {
    * Constructs an instance of Maybe.
    * @param value - The value to be contained, or null/undefined if absent.
    */
-  constructor(private readonly value: T | null | undefined = null) { }
+  constructor(private readonly value: T | null | undefined = null) {}
 
   /**
    * Creates a Maybe with a present value (Just).
@@ -48,8 +48,10 @@ export class Maybe<T> {
    * @param fn - A function that transforms the contained value.
    * @returns A new Maybe with the transformed value, or Nothing if the original was Nothing.
    */
-  public map<U>(fn: (value: T) => U): Maybe<U> {
-    return this.isNothing() ? Maybe.nothing() : Maybe.just(fn(this.value as T));
+  public map<U>(fn: (value: T) => U | null | undefined): Maybe<U> {
+    return this.isNothing()
+      ? Maybe.nothing()
+      : new Maybe<U>(fn(this.value as T));
   }
 
   /**
@@ -76,7 +78,7 @@ export class Maybe<T> {
    * @returns The contained value or null if the Maybe is Nothing.
    */
   public getOrNull(): T | null {
-    return this.isNothing() ? null : this.value as T;
+    return this.isNothing() ? null : (this.value as T);
   }
 
   /**
@@ -84,7 +86,7 @@ export class Maybe<T> {
    * @returns The contained value or undefined if the Maybe is Nothing.
    */
   public getOrUndefined(): T | undefined {
-    return this.isNothing() ? undefined : this.value as T;
+    return this.isNothing() ? undefined : (this.value as T);
   }
 
   /**
@@ -106,7 +108,7 @@ export class Maybe<T> {
    * @returns The contained value or the value supplied by the supplier function.
    */
   public getOrElseGet(supplier: () => T): T {
-    return this.isNothing() ? supplier() : this.value as T;
+    return this.isNothing() ? supplier() : (this.value as T);
   }
 }
 

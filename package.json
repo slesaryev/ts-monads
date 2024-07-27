@@ -1,6 +1,6 @@
 {
   "name": "@slesaryev/ts-monads",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "A TypeScript library providing Maybe and Either monads for functional programming.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,9 +27,7 @@
     "url": "https://github.com/slesaryev/ts-monads/issues"
   },
   "homepage": "https://github.com/slesaryev/ts-monads#readme",
-  "files": [
-    "dist/**/*"
-  ],
+  "files": ["dist/**/*"],
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.10",
